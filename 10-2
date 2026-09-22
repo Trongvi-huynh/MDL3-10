@@ -1,0 +1,99 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class Book {
+    private String name;
+    private String author;
+    private int year;
+
+    public Book(String name, String author, int year) {
+        this.name = name;
+        this.author = author;
+        this.year = year;
+    }
+
+    public void displayData() {
+        System.out.println("Tên sách: " + name);
+        System.out.println("Tác giả: " + author);
+        System.out.println("Năm xuất bản: " + year);
+        System.out.println("-------------------------");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        HashMap<String, Book> books = new HashMap<>();
+
+        while (true) {
+            System.out.println("\n===== QUẢN LÝ SÁCH =====");
+            System.out.println("1. Thêm sách");
+            System.out.println("2. Tìm kiếm sách theo tên");
+            System.out.println("3. Hiển thị danh sách sách");
+            System.out.println("4. Thoát");
+            System.out.print("Lựa chọn: ");
+
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Nhập tên sách: ");
+                        String name = scanner.nextLine();
+
+                        System.out.print("Nhập tác giả: ");
+                        String author = scanner.nextLine();
+
+                        System.out.print("Nhập năm xuất bản: ");
+                        int year = Integer.parseInt(scanner.nextLine());
+
+                        books.put(name, new Book(name, author, year));
+                        System.out.println("Thêm sách thành công!");
+                        break;
+
+                    case 2:
+                        System.out.print("Nhập tên sách cần tìm: ");
+                        String searchName = scanner.nextLine();
+
+                        boolean found = false;
+
+                        for (Map.Entry<String, Book> entry : books.entrySet()) {
+                            if (entry.getKey().toLowerCase().contains(searchName.toLowerCase())) {
+                                entry.getValue().displayData();
+                                found = true;
+                            }
+                        }
+
+                        if (!found) {
+                            System.out.println("Không tìm thấy sách!");
+                        }
+                        break;
+
+                    case 3:
+                        if (books.isEmpty()) {
+                            System.out.println("Danh sách sách đang trống!");
+                        } else {
+                            System.out.println("\n===== DANH SÁCH SÁCH =====");
+
+                            for (Book book : books.values()) {
+                                book.displayData();
+                            }
+                        }
+                        break;
+
+                    case 4:
+                        System.out.println("Đã thoát chương trình!");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("Vui lòng chọn từ 1 đến 4!");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Dữ liệu nhập không hợp lệ! Vui lòng nhập số.");
+            }
+        }
+    }
+}
