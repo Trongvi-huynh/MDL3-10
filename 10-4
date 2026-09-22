@@ -1,0 +1,136 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+interface Manage<T> {
+    void add(T item);
+    void update(int index, T item);
+    void delete(int index);
+    void display();
+}
+
+class Student {
+    private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public void displayData() {
+        System.out.println("Tên sinh viên: " + name);
+    }
+}
+
+class AttendanceManager implements Manage<Student> {
+    private ArrayList<Student> students = new ArrayList<>();
+
+    @Override
+    public void add(Student item) {
+        students.add(item);
+    }
+
+    @Override
+    public void update(int index, Student item) {
+        students.set(index, item);
+    }
+
+    @Override
+    public void delete(int index) {
+        students.remove(index);
+    }
+
+    @Override
+    public void display() {
+        if (students.isEmpty()) {
+            System.out.println("Danh sách sinh viên đang trống!");
+            return;
+        }
+
+        System.out.println("\n===== DANH SÁCH ĐIỂM DANH =====");
+
+        for (int i = 0; i < students.size(); i++) {
+            System.out.println((i + 1) + ". ");
+            students.get(i).displayData();
+        }
+    }
+
+    public int size() {
+        return students.size();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        AttendanceManager manager = new AttendanceManager();
+
+        while (true) {
+            System.out.println("\n===== QUẢN LÝ ĐIỂM DANH =====");
+            System.out.println("1. Thêm sinh viên");
+            System.out.println("2. Sửa sinh viên");
+            System.out.println("3. Xóa sinh viên");
+            System.out.println("4. Hiển thị danh sách");
+            System.out.println("5. Thoát");
+            System.out.print("Lựa chọn: ");
+
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Nhập tên sinh viên: ");
+                        String name = scanner.nextLine();
+
+                        manager.add(new Student(name));
+                        System.out.println("Thêm sinh viên thành công!");
+                        break;
+
+                    case 2:
+                        System.out.print("Nhập vị trí cần sửa: ");
+                        int updateIndex = Integer.parseInt(scanner.nextLine());
+
+                        if (updateIndex < 1 || updateIndex > manager.size()) {
+                            System.out.println("Vị trí không hợp lệ!");
+                            break;
+                        }
+
+                        System.out.print("Nhập tên mới: ");
+                        String newName = scanner.nextLine();
+
+                        manager.update(updateIndex - 1, new Student(newName));
+                        System.out.println("Cập nhật thành công!");
+                        break;
+
+                    case 3:
+                        System.out.print("Nhập vị trí cần xóa: ");
+                        int deleteIndex = Integer.parseInt(scanner.nextLine());
+
+                        if (deleteIndex < 1 || deleteIndex > manager.size()) {
+                            System.out.println("Vị trí không hợp lệ!");
+                            break;
+                        }
+
+                        manager.delete(deleteIndex - 1);
+                        System.out.println("Xóa sinh viên thành công!");
+                        break;
+
+                    case 4:
+                        manager.display();
+                        break;
+
+                    case 5:
+                        System.out.println("Đã thoát chương trình!");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("Vui lòng chọn từ 1 đến 5!");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Dữ liệu nhập không hợp lệ! Vui lòng nhập số.");
+            } catch (Exception e) {
+                System.out.println("Có lỗi xảy ra!");
+            }
+        }
+    }
+}
