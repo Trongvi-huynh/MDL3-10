@@ -1,0 +1,105 @@
+import java.util.LinkedList;
+import java.util.Scanner;
+
+class User {
+    private String name;
+    private String email;
+    private String phone;
+
+    public User(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void displayData() {
+        System.out.println("Tên: " + name);
+        System.out.println("Email: " + email);
+        System.out.println("Số điện thoại: " + phone);
+        System.out.println("-------------------------");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<User> users = new LinkedList<>();
+
+        while (true) {
+            System.out.println("\n===== QUẢN LÝ NGƯỜI DÙNG =====");
+            System.out.println("1. Thêm người dùng");
+            System.out.println("2. Xóa người dùng theo email");
+            System.out.println("3. Hiển thị danh sách");
+            System.out.println("4. Thoát");
+            System.out.print("Lựa chọn: ");
+
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Nhập tên: ");
+                        String name = scanner.nextLine();
+
+                        System.out.print("Nhập email: ");
+                        String email = scanner.nextLine();
+
+                        System.out.print("Nhập số điện thoại: ");
+                        String phone = scanner.nextLine();
+
+                        users.add(new User(name, email, phone));
+                        System.out.println("Thêm người dùng thành công!");
+                        break;
+
+                    case 2:
+                        System.out.print("Nhập email người dùng cần xóa: ");
+                        String emailDelete = scanner.nextLine();
+
+                        User userDelete = null;
+
+                        for (User user : users) {
+                            if (user.getEmail().equalsIgnoreCase(emailDelete)) {
+                                userDelete = user;
+                                break;
+                            }
+                        }
+
+                        if (userDelete != null) {
+                            users.remove(userDelete);
+                            System.out.println("Xóa người dùng thành công!");
+                        } else {
+                            System.out.println("Không tìm thấy người dùng!");
+                        }
+                        break;
+
+                    case 3:
+                        if (users.isEmpty()) {
+                            System.out.println("Danh sách người dùng đang trống!");
+                        } else {
+                            System.out.println("\n===== DANH SÁCH NGƯỜI DÙNG =====");
+
+                            for (User user : users) {
+                                user.displayData();
+                            }
+                        }
+                        break;
+
+                    case 4:
+                        System.out.println("Đã thoát chương trình!");
+                        scanner.close();
+                        return;
+
+                    default:
+                        System.out.println("Vui lòng chọn từ 1 đến 4!");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Dữ liệu nhập không hợp lệ! Vui lòng nhập số.");
+            }
+        }
+    }
+}
